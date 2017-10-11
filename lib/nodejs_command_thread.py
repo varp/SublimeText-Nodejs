@@ -42,10 +42,10 @@ class CommandThread(threading.Thread):
             shell = os.name == 'nt'
             if self.working_dir != "":
                 os.chdir(self.working_dir)
-            proc = subprocess.Popen(self.command,
-                                    stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+            self.proc = subprocess.Popen(self.command, stdin=subprocess.PIPE,
+                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                                     shell=shell, universal_newlines=False, env=self.env)
-            output = codecs.decode(proc.communicate()[0])
+            output = codecs.decode(self.proc.stdout.read())
             # if sublime's python gets bumped to 2.7 we can just do:
             # output = subprocess.check_output(self.command)
             main_thread(self.on_done, output)

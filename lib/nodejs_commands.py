@@ -1,6 +1,7 @@
 import os
 
 from .nodejs_base import *
+from .nodejs_debugger import *
 from .nodejs_constants import PLUGIN_PATH, BUILDER_PATH, UGLIFY_PATH
 # Commands to run
 
@@ -53,7 +54,7 @@ class NodeRunCommand(NodeTextCommand):
             self.panel(result)
 
 
-class NodeDrunCommand(NodeTextCommand):
+class NodeDrunCommand(NodeTextCommand, NodejsDebugger):
     """
     Command to run node with debug
     """
@@ -63,6 +64,7 @@ class NodeDrunCommand(NodeTextCommand):
         os.system(command)
         command = ['node', 'debug', self.view.file_name()]
         self.run_command(command, self.command_done)
+        self.proccess_command()
 
     def command_done(self, result):
         s = sublime.load_settings("Nodejs.sublime-settings")
